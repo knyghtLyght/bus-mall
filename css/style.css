@@ -1,5 +1,99 @@
 /* color pallet
 void #0E0A18
-fuschia #4717F6
+fuschia #A539CB
 jewel #4717F6
 stark #E8DFE0 */
+
+body {
+  margin-top: 100px;
+  background-color: #0E0A18;
+  color: #E8DFE0;
+}
+
+header {
+  position: fixed;
+  top: 0px;
+  height: 100px;
+  width: 100%;
+  background-color: black;
+  color: #A539CB;
+}
+
+nav {
+  width: 960px;
+  height: 70px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+nav img {
+  float: left;
+  height: 70px;
+}
+
+nav h1 {
+  font-size: 180%;
+  width: fit-content;
+  margin: auto;
+  padding: 21px 0;
+}
+
+/* nav ul {
+  float: right;
+}
+
+nav li {
+  display: inline-block;
+}
+
+nav li img {
+  width: 100%;
+} */
+
+main {
+  width: 960px;
+  margin: auto;
+}
+
+main section {
+  float: left;
+  width: 300px;
+  margin: 30px 30px 30px 0;
+}
+
+main section:nth-child(3n) {
+  margin: 30px 0;
+}
+
+main img {
+  width: 100%;
+}
+
+footer {
+  position: fixed;
+  bottom: 0px;
+  height: 100px;
+  width: 100%;
+  background-color: black;
+  color: #4717F6
+}
+
+footer section {
+  width: 960px;
+  margin: auto;
+  font-size: 200%;
+}
+
+footer ul {
+  text-align: center;
+  margin: 15px 0;
+}
+
+footer li {
+  display: inline;
+  padding: 0 50px;
+}
+
+footer ul:nth-child(2n) li {
+  padding: 0 120px;
+}

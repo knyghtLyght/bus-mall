@@ -3,10 +3,57 @@
 <head>
   <meta charset="utf-8" />
   <title>Goat picker</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="css/reset.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
 </head>
 <body>
-  
+  <header>
+    <nav>
+      <img src="img/small_bus_BW_icon.png" alt="logo">
+      <h1>BussMall Product Test</h1>
+      <ul>
+        <li><img src="img/git-icon.png" alt="Git Icon"></li>
+        <li><img src="img/linkedin-icon.png" alt="Git Icon"></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <img id="choiceOne" src="" alt="">
+    </section>
+    <section>
+      <img id="choiceTwo" src="" alt="">
+    </section>
+    <section>
+      <img id="choiceThree" src="" alt="">
+    </section>
+    <section>
+      <p>Votes so far</p>
+      <p id="choiceOneStats">choiceOneStats</p>
+    </section>
+    <section>
+      <p>Votes so far</p>
+      <p id="choiceTwoStats">choiceTwoStats</p>
+    </section>
+    <section>
+      <p>Votes so far</p>
+      <p id="choiceThreeStats">choiceThreeStats</p>
+    </section>
+  </main>
+  <footer>
+    <section id="statsDsiplay">
+      <ul>
+        <li>Products Seen</li>
+        <li>Vote Count</li>
+        <li>Votes Allowed</li>
+      </ul>
+      <ul>
+        <li id="photosSeen"></li>
+        <li id="voteCount"></li>
+        <li id="voteLimit"></li>
+      </ul>
+    </section>
+  </footer>
   <script src="js/app.js"></script>
 </body>
 </html>

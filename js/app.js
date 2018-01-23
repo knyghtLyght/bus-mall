@@ -1,22 +1,26 @@
 'use strict';
 
 // Devlare variables
-var voteLimit = 10;
-var totalVoteCount = 0;
+var voteLimit = 25;
+var totalVoteCount = -1;
 var photosSeen = 0;
+var lastThreeArray = [];
 var imgElC1 = document.getElementById('choiceOne');
 var imgElC2 = document.getElementById('choiceTwo');
 var imgElC3 = document.getElementById('choiceThree');
 var liElPhotoSeenDisplay = document.getElementById('photosSeen');
 var liElVoteCountDisplay = document.getElementById('voteCount');
 var liElVoteLimitDisplay = document.getElementById('voteLimit');
+var pElchoiceOneStatsDisplay = document.getElementById('choiceOneStats');
+var pElchoiceTwoStatsDisplay = document.getElementById('choiceTwoStats');
+var pElchoiceThreeStatsDisplay = document.getElementById('choiceThreeStats');
 PhotoChoice.allPhotos = [];
 
 // Create object constructor
 function PhotoChoice(name, filepath) {
   this.name = name;
   this.filepath = filepath;
-  this.voteCount = 0;
+  this.voteCount = -1;
   this.lastThree = false;
   PhotoChoice.allPhotos.push(this);
 }
@@ -61,23 +65,39 @@ function displayNextRandPhoto(photoEl) {
   photoEl.src = PhotoChoice.allPhotos[index].filepath;
   PhotoChoice.allPhotos[index].voteCount ++;
   PhotoChoice.allPhotos[index].lastThree = true;
+  lastThreeArray.push(index);
   photosSeen++;
+}
+
+// Previous three flag reset function
+function flagClear (lastThreeArray) {
+  for (var i in PhotoChoice.allPhotos) {
+    if (i !== lastThreeArray[0] || lastThreeArray[1] || lastThreeArray[2]) {
+      PhotoChoice.allPhotos[i].lastThree = false;
+    }
+  }
 }
 
 // Render function
 function updateDisplay () {
-  // if (totalVoteCount > voteLimit) {
+  if (totalVoteCount <= voteLimit) {
+    lastThreeArray = [];
     displayNextRandPhoto(imgElC1);
     displayNextRandPhoto(imgElC2);
     displayNextRandPhoto(imgElC3);
-    totalVoteCount++;
+    totalVoteCount += 1;
+    pElchoiceOneStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[0]].voteCount;
+    pElchoiceTwoStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[1]].voteCount;
+    pElchoiceThreeStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[2]].voteCount;
     liElPhotoSeenDisplay.textContent = photosSeen;
-    liElVoteCountDisplay.textcontent = totalVoteCount;
-  // } else {
-  //   imgElC1.removeEventListener('click', updateDisplay);
-  //   imgElC2.removeEventListener('click', updateDisplay);
-  //   imgElC3.removeEventListener('click', updateDisplay);
-  // }
+    liElVoteCountDisplay.textContent = totalVoteCount;
+    flagClear(lastThreeArray);
+  } else {
+    imgElC1.removeEventListener('click', updateDisplay);
+    imgElC2.removeEventListener('click', updateDisplay);
+    imgElC3.removeEventListener('click', updateDisplay);
+    alert('You\'re out of votes!');
+  }
 }
 
 // Event listener for each choice
@@ -85,7 +105,7 @@ imgElC1.addEventListener('click', updateDisplay);
 imgElC2.addEventListener('click', updateDisplay);
 imgElC3.addEventListener('click', updateDisplay);
 
-// Page load
+// inital page load
 liElVoteCountDisplay.textContent = totalVoteCount;
 liElVoteLimitDisplay.textContent = voteLimit;
 updateDisplay();

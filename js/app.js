@@ -66,7 +66,7 @@ function displayNextRandPhoto(photoEl) {
   var index = randIndexGen();
   photoEl.alt = PhotoChoice.allPhotos[index].name;
   photoEl.src = PhotoChoice.allPhotos[index].filepath;
-  PhotoChoice.allPhotos[index].lastThree = true;
+  // PhotoChoice.allPhotos[index].lastThree = true;
   lastThreeArray.push(index);
   photosSeen++;
 }

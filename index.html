@@ -5,12 +5,13 @@
   <title>Goat picker</title>
   <link rel="stylesheet" type="text/css" media="screen" href="css/reset.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 </head>
 <body>
   <header>
     <nav>
       <img src="img/small_bus_BW_icon.png" alt="logo">
-      <h1>BussMall Product Test</h1>
+      <h1>Click on the prodcut you like the most</h1>
       <ul>
         <li><img src="img/git-icon.png" alt="Git Icon"></li>
         <li><img src="img/linkedin-icon.png" alt="Git Icon"></li>
@@ -18,27 +19,28 @@
     </nav>
   </header>
   <main>
-    <section>
+    <section class="photoDisplay">
       <img id="choiceOne" src="" alt="">
     </section>
-    <section>
+    <section class="photoDisplay">
       <img id="choiceTwo" src="" alt="">
     </section>
-    <section>
+    <section id="thirdPhoto" class="photoDisplay">
       <img id="choiceThree" src="" alt="">
     </section>
-    <section>
+    <section class="statDisplay">
       <p>Votes so far</p>
       <p id="choiceOneStats">choiceOneStats</p>
     </section>
-    <section>
+    <section lass="statDisplay">
       <p>Votes so far</p>
       <p id="choiceTwoStats">choiceTwoStats</p>
     </section>
-    <section>
+    <section lass="statDisplay">
       <p>Votes so far</p>
       <p id="choiceThreeStats">choiceThreeStats</p>
     </section>
+    <canvas id="myChart" width="960" height="400">Chart place holder</canvas>
   </main>
   <footer>
     <section id="statsDsiplay">

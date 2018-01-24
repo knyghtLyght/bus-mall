@@ -5,7 +5,7 @@ jewel #4717F6
 stark #E8DFE0 */
 
 body {
-  margin-top: 100px;
+  margin: 100px 0;
   background-color: #0E0A18;
   color: #E8DFE0;
 }
@@ -35,7 +35,7 @@ nav h1 {
   float: left;
   top: 21px;
   font-size: 180%;
-  margin: 21px 0 0 285px;
+  margin: 21px 0 0 120px;
 }
 
 nav ul {
@@ -61,7 +61,7 @@ main {
 main section {
   float: left;
   width: 300px;
-  height: 453px;
+  height: 300px;
   margin: 30px 30px 30px 0;
   font-size: 200%;
   text-align: center;
@@ -72,8 +72,19 @@ main section:nth-child(3n) {
   margin: 30px 0;
 }
 
+.statDisplay {
+  height: 100px;
+}
+
 main img {
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+main canvas {
+  max-height: 100%;
+  max-width: 100%;
+  border: 1px solid #E8DFE0;
 }
 
 footer {

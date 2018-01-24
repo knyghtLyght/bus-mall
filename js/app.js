@@ -2,7 +2,7 @@
 
 // Devlare variables
 var voteLimit = 25;
-var totalVoteCount = -1;
+var totalVoteCount = 0;
 var photosSeen = 0;
 var lastThreeArray = [];
 var imgElC1 = document.getElementById('choiceOne');
@@ -15,14 +15,17 @@ var pElchoiceOneStatsDisplay = document.getElementById('choiceOneStats');
 var pElchoiceTwoStatsDisplay = document.getElementById('choiceTwoStats');
 var pElchoiceThreeStatsDisplay = document.getElementById('choiceThreeStats');
 PhotoChoice.allPhotos = [];
+var votesPerPhoto = [];
+var productNames = [];
 
 // Create object constructor
 function PhotoChoice(name, filepath) {
   this.name = name;
   this.filepath = filepath;
-  this.voteCount = -1;
+  this.voteCount = 0;
   this.lastThree = false;
   PhotoChoice.allPhotos.push(this);
+  productNames.push(this.name);
 }
 
 // Create instances of PhotoChoices
@@ -63,7 +66,6 @@ function displayNextRandPhoto(photoEl) {
   var index = randIndexGen();
   photoEl.alt = PhotoChoice.allPhotos[index].name;
   photoEl.src = PhotoChoice.allPhotos[index].filepath;
-  PhotoChoice.allPhotos[index].voteCount ++;
   PhotoChoice.allPhotos[index].lastThree = true;
   lastThreeArray.push(index);
   photosSeen++;
@@ -72,38 +74,92 @@ function displayNextRandPhoto(photoEl) {
 // Previous three flag reset function
 function flagClear (lastThreeArray) {
   for (var i in PhotoChoice.allPhotos) {
-    if (i !== lastThreeArray[0] || lastThreeArray[1] || lastThreeArray[2]) {
+    if (lastThreeArray.includes(i)) {
       PhotoChoice.allPhotos[i].lastThree = false;
     }
   }
 }
 
-// Render function
-function updateDisplay () {
-  if (totalVoteCount <= voteLimit) {
-    lastThreeArray = [];
-    displayNextRandPhoto(imgElC1);
-    displayNextRandPhoto(imgElC2);
-    displayNextRandPhoto(imgElC3);
-    totalVoteCount += 1;
-    pElchoiceOneStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[0]].voteCount;
-    pElchoiceTwoStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[1]].voteCount;
-    pElchoiceThreeStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[2]].voteCount;
-    liElPhotoSeenDisplay.textContent = photosSeen;
-    liElVoteCountDisplay.textContent = totalVoteCount;
-    flagClear(lastThreeArray);
-  } else {
-    imgElC1.removeEventListener('click', updateDisplay);
-    imgElC2.removeEventListener('click', updateDisplay);
-    imgElC3.removeEventListener('click', updateDisplay);
-    alert('You\'re out of votes!');
+// FIll array of votesPerPhoto for JSCHart
+function updateVotes () {
+  for (var i in PhotoChoice.allPhotos) {
+    votesPerPhoto[i] = PhotoChoice.allPhotos[i].voteCount;
   }
 }
 
+// Render the chart
+function renderChart () {
+  var context = document.getElementById('myChart').getContext('2d');
+  var chartColors = [
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6',
+    '#A539CB', '#4717F6'
+  ];
+  var productChart = new Chart(context, {
+    type: 'bar',
+    data: {
+      labels: productNames,
+      datasets: [{
+        label: 'Votes per Product',
+        data: votesPerPhoto,
+        backgroundColor: chartColors,
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+
+// Render function
+function updateDisplay () {
+  lastThreeArray = [];
+  displayNextRandPhoto(imgElC1);
+  displayNextRandPhoto(imgElC2);
+  displayNextRandPhoto(imgElC3);
+  pElchoiceOneStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[0]].voteCount;
+  pElchoiceTwoStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[1]].voteCount;
+  pElchoiceThreeStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[2]].voteCount;
+  liElPhotoSeenDisplay.textContent = photosSeen;
+  liElVoteCountDisplay.textContent = totalVoteCount;
+  flagClear(lastThreeArray);
+  if (totalVoteCount === voteLimit) {
+    updateVotes();
+    renderChart();
+    imgElC1.removeEventListener('click', clickHandler);
+    imgElC2.removeEventListener('click', clickHandler);
+    imgElC3.removeEventListener('click', clickHandler);
+  }
+}
+
+// event handler
+function clickHandler (e) {
+  totalVoteCount ++;
+  for (var i in PhotoChoice.allPhotos) {
+    if (e.target.alt === PhotoChoice.allPhotos[i].name) {
+      PhotoChoice.allPhotos[i].voteCount++;
+    }
+  }
+  updateDisplay();
+}
+
 // Event listener for each choice
-imgElC1.addEventListener('click', updateDisplay);
-imgElC2.addEventListener('click', updateDisplay);
-imgElC3.addEventListener('click', updateDisplay);
+imgElC1.addEventListener('click', clickHandler);
+imgElC2.addEventListener('click', clickHandler);
+imgElC3.addEventListener('click', clickHandler);
 
 // inital page load
 liElVoteCountDisplay.textContent = totalVoteCount;

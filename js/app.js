@@ -1,7 +1,7 @@
 'use strict';
 
 // Devlare variables
-var voteLimit = 25;
+var voteLimit = 5;
 var totalVoteCount = 0;
 var photosSeen = 0;
 var lastThreeArray = [];
@@ -23,7 +23,6 @@ function PhotoChoice(name, filepath) {
   this.name = name;
   this.filepath = filepath;
   this.voteCount = 0;
-  this.lastThree = false;
   PhotoChoice.allPhotos.push(this);
   productNames.push(this.name);
 }
@@ -52,12 +51,10 @@ new PhotoChoice('wine-glass', 'img/wine-glass.jpg');
 
 // Random index generator
 function randIndexGen () {
-  var saftyLoopBreak = 0;
   // If amung the last three don't display logic
   do {
     var randIndex = Math.floor(Math.random() * PhotoChoice.allPhotos.length);
-    saftyLoopBreak++;
-  } while (PhotoChoice.allPhotos[randIndex].lastThree === true || saftyLoopBreak >= 100);
+  } while (lastThreeArray.includes(randIndex) === true);
   return randIndex;
 }
 
@@ -66,24 +63,22 @@ function displayNextRandPhoto(photoEl) {
   var index = randIndexGen();
   photoEl.alt = PhotoChoice.allPhotos[index].name;
   photoEl.src = PhotoChoice.allPhotos[index].filepath;
-  // PhotoChoice.allPhotos[index].lastThree = true;
   lastThreeArray.push(index);
   photosSeen++;
-}
-
-// Previous three flag reset function
-function flagClear (lastThreeArray) {
-  for (var i in PhotoChoice.allPhotos) {
-    if (lastThreeArray.includes(i)) {
-      PhotoChoice.allPhotos[i].lastThree = false;
-    }
-  }
 }
 
 // FIll array of votesPerPhoto for JSCHart
 function updateVotes () {
   for (var i in PhotoChoice.allPhotos) {
-    votesPerPhoto[i] = PhotoChoice.allPhotos[i].voteCount;
+    votesPerPhoto[i] += PhotoChoice.allPhotos[i].voteCount;
+  }
+}
+
+// Clear the screen for the chart
+function clearPhotos () {
+  var photoDisplayDiv = document.getElementById('photoDisplayDiv');
+  while (photoDisplayDiv.firstChild) {
+    photoDisplayDiv.removeChild(photoDisplayDiv.firstChild);
   }
 }
 
@@ -135,8 +130,8 @@ function updateDisplay () {
   pElchoiceThreeStatsDisplay.textContent = PhotoChoice.allPhotos[lastThreeArray[2]].voteCount;
   liElPhotoSeenDisplay.textContent = photosSeen;
   liElVoteCountDisplay.textContent = totalVoteCount;
-  flagClear(lastThreeArray);
   if (totalVoteCount === voteLimit) {
+    // clearPhotos();
     updateVotes();
     renderChart();
     imgElC1.removeEventListener('click', clickHandler);

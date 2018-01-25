@@ -1,10 +1,10 @@
 'use strict';
 
 // Devlare variables
-var voteLimit = 25;
-var totalVoteCount = 0;
-var photosSeen = 0;
-var lastThreeArray = [];
+var voteLimit = 25; // Limit to the clicks the user can make
+var totalVoteCount = 0; // Keeps track of the number of clicks the user has made
+var photosSeen = 0; // Keeps track of the number of photos displayed
+var lastThreeArray = []; // Used to keep the images displayed unique and non repeating
 var imgElC1 = document.getElementById('choiceOne');
 var imgElC2 = document.getElementById('choiceTwo');
 var imgElC3 = document.getElementById('choiceThree');
@@ -14,9 +14,10 @@ var liElVoteLimitDisplay = document.getElementById('voteLimit');
 var pElchoiceOneStatsDisplay = document.getElementById('choiceOneStats');
 var pElchoiceTwoStatsDisplay = document.getElementById('choiceTwoStats');
 var pElchoiceThreeStatsDisplay = document.getElementById('choiceThreeStats');
-PhotoChoice.allPhotos = [];
+PhotoChoice.allPhotos = []; // Stores all the photo objects
 var votesPerPhoto = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var productNames = [];
+var lastThreeCounter = 0;
 
 // Create object constructor
 function PhotoChoice(name, filepath) {
@@ -61,13 +62,15 @@ function randIndexGen () {
 // Render helper function
 function displayNextRandPhoto(photoEl) {
   var index = randIndexGen();
+  if (lastThreeCounter === 6) {lastThreeCounter = 0;}
   photoEl.alt = PhotoChoice.allPhotos[index].name;
   photoEl.src = PhotoChoice.allPhotos[index].filepath;
-  lastThreeArray.push(index);
+  lastThreeArray[lastThreeCounter] = index;
+  lastThreeCounter++;
   photosSeen++;
 }
 
-// FIll array of votesPerPhoto for JSCHart
+// Fill array of votesPerPhoto for JSCHart
 function updateVotes () {
   for (var i in PhotoChoice.allPhotos) {
     votesPerPhoto[i] += PhotoChoice.allPhotos[i].voteCount;
@@ -77,8 +80,8 @@ function updateVotes () {
 // Clear the screen for the chart
 function clearPhotos () {
   var photoDisplayDiv = document.getElementById('photoDisplayDiv');
-  while (photoDisplayDiv.firstChild) {
-    photoDisplayDiv.removeChild(photoDisplayDiv.firstChild);
+  while (photoDisplayDiv.firstChild) { // As long as there is a child object...
+    photoDisplayDiv.removeChild(photoDisplayDiv.firstChild); //remove that child
   }
 }
 
@@ -116,7 +119,7 @@ function renderChart () {
     '#A539CB', '#4717F6',
     '#A539CB', '#4717F6'
   ];
-  var productChart = new Chart(context, {
+  var productChart = new Chart(context, { //eslint-disable-line
     type: 'bar',
     data: {
       labels: productNames,
@@ -140,7 +143,6 @@ function renderChart () {
 
 // Render function
 function updateDisplay () {
-  lastThreeArray = [];
   displayNextRandPhoto(imgElC1);
   displayNextRandPhoto(imgElC2);
   displayNextRandPhoto(imgElC3);

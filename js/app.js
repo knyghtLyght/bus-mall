@@ -1,7 +1,7 @@
 'use strict';
 
 // Devlare variables
-var voteLimit = 5;
+var voteLimit = 25;
 var totalVoteCount = 0;
 var photosSeen = 0;
 var lastThreeArray = [];
@@ -15,7 +15,7 @@ var pElchoiceOneStatsDisplay = document.getElementById('choiceOneStats');
 var pElchoiceTwoStatsDisplay = document.getElementById('choiceTwoStats');
 var pElchoiceThreeStatsDisplay = document.getElementById('choiceThreeStats');
 PhotoChoice.allPhotos = [];
-var votesPerPhoto = [];
+var votesPerPhoto = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var productNames = [];
 
 // Create object constructor
@@ -82,6 +82,25 @@ function clearPhotos () {
   }
 }
 
+// Local storage check and laod
+function localStorageHandler () {
+  var storedVotesPerPhoto = [];
+  if (localStorage.storedVotesPerPhoto) {
+    storedVotesPerPhoto = localStorage.storedVotesPerPhoto.split(',');
+    for (var i in votesPerPhoto) {
+      votesPerPhoto[i] += votesPerPhoto[i] + parseInt(storedVotesPerPhoto[i]);
+    }
+    localStorage.storedVotesPerPhoto = votesPerPhoto;
+  } else {
+    localStorage.storedVotesPerPhoto = votesPerPhoto;
+  }
+  if (localStorage.storedPhotosSeen) {
+    photosSeen += parseInt(localStorage.storedPhotosSeen);
+  } else {
+    localStorage.storedPhotosSeen = photosSeen;
+  }
+}
+
 // Render the chart
 function renderChart () {
   var context = document.getElementById('myChart').getContext('2d');
@@ -131,8 +150,9 @@ function updateDisplay () {
   liElPhotoSeenDisplay.textContent = photosSeen;
   liElVoteCountDisplay.textContent = totalVoteCount;
   if (totalVoteCount === voteLimit) {
-    // clearPhotos();
+    clearPhotos();
     updateVotes();
+    localStorageHandler();
     renderChart();
     imgElC1.removeEventListener('click', clickHandler);
     imgElC2.removeEventListener('click', clickHandler);

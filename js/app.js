@@ -14,6 +14,8 @@ var liElVoteLimitDisplay = document.getElementById('voteLimit');
 var pElchoiceOneStatsDisplay = document.getElementById('choiceOneStats');
 var pElchoiceTwoStatsDisplay = document.getElementById('choiceTwoStats');
 var pElchoiceThreeStatsDisplay = document.getElementById('choiceThreeStats');
+var buttonElReload = document.getElementById('reloadPageButton');
+var buttonElStorageClear = document.getElementById('localStorageClearButton');
 PhotoChoice.allPhotos = []; // Stores all the photo objects
 var votesPerPhoto = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 var productNames = [];
@@ -99,6 +101,7 @@ function localStorageHandler () {
   }
   if (localStorage.storedPhotosSeen) {
     photosSeen += parseInt(localStorage.storedPhotosSeen);
+    localStorage.storedPhotosSeen = photosSeen;
   } else {
     localStorage.storedPhotosSeen = photosSeen;
   }
@@ -177,8 +180,16 @@ function clickHandler (e) {
 imgElC1.addEventListener('click', clickHandler);
 imgElC2.addEventListener('click', clickHandler);
 imgElC3.addEventListener('click', clickHandler);
+buttonElReload.addEventListener('click', function () {
+  location.reload();
+});
+buttonElStorageClear.addEventListener('click', function () {
+  localStorage.clear();
+  location.reload();
+});
 
 // inital page load
+localStorageHandler();
 liElVoteCountDisplay.textContent = totalVoteCount;
 liElVoteLimitDisplay.textContent = voteLimit;
 updateDisplay();
